@@ -47,6 +47,12 @@
                 <button id="use-sample-acc" title="Sample Accuracy">Sample Accuracy</button>
             </div>
         </div>
+        <div class="group">
+            <button id="help-btn" class="help-btn" aria-controls="help-drawer" aria-expanded="false"
+                title="Help (press ?)">
+                Help
+            </button>
+        </div>
     </header>
 
     <main>
@@ -121,11 +127,11 @@
             </div>
 
             <div id="pane-blank" class="pane placeholder" hidden aria-hidden="true">
-  <div class="placeholder-inner">
-    <h3>No plots selected</h3>
-    <p>Select a <strong>UMAP</strong> or an <strong>Accuracy</strong> tab above to begin.</p>
-  </div>
-</div>
+                <div class="placeholder-inner">
+                    <h3>No plots selected</h3>
+                    <p>Select a <strong>UMAP</strong> or an <strong>Accuracy</strong> tab above to begin.</p>
+                </div>
+            </div>
         </section>
         <section id="metrics" aria-label="Clustering metrics">
             <h2>Clustering Metrics</h2>
@@ -137,7 +143,6 @@
                         <!-- buttons injected by JS based on selected UMAP -->
                     </nav>
                     <div id="metrics-plot"></div>
-                    <div id="metrics-status" class="panel-status" aria-live="polite"></div>
                 </div>
 
                 <!-- Right: explanation -->
@@ -148,9 +153,146 @@
                 </aside>
             </div>
         </section>
+        <!-- ===== Composition & NMR Summaries ===== -->
+        <section id="chem" aria-label="Composition & NMR summaries">
+            <h2>Composition & NMR Summaries</h2>
+
+            <div id="chem-grid">
+                <!-- Left: mini sidebar -->
+                <aside id="chem-side">
+                    <div class="section">
+                        <h3>Show Top-K (by items)</h3>
+                        <input id="chem-topk" type="number" min="1" max="300" step="1" value="20" />
+                    </div>
+
+                    <div class="section">
+                        <h3>Metric</h3>
+                        <nav id="chem-tabs" class="tabs sub" role="tablist" aria-label="Chem metrics"
+                            aria-orientation="vertical">
+
+                        </nav>
+                    </div>
+                </aside>
+
+                <!-- Right: plot + explanation -->
+                <div id="chem-main">
+                    <div id="chem-plot"></div>
+                    <aside id="chem-desc" class="metric-desc">
+                        <em>Select a metric to see its definition and interpretation.</em>
+                    </aside>
+                </div>
+            </div>
+        </section>
+        <!-- ==================== Confusion Matrix ==================== -->
+        <section id="conf" aria-label="Confusion matrix">
+            <h2>Confusion Matrix</h2>
+
+            <div id="conf-grid">
+                <!-- Left: matrix plot -->
+                <div id="conf-left">
+                    <div id="conf-plot"></div>
+                </div>
+
+                <!-- Right: controls & explainer -->
+                <aside id="conf-right">
+                    <div class="section">
+                        <h3>Retrieval k</h3>
+                        <nav id="cm-k-tabs" class="tabs vstack" role="tablist" aria-label="Retrieval k">
+                            <button type="button" data-k="1" aria-selected="true">k = 1</button>
+                            <button type="button" data-k="5" aria-selected="false">k = 5</button>
+                            <button type="button" data-k="10" aria-selected="false">k = 10</button>
+                        </nav>
+                    </div>
+
+                    <div class="section">
+                        <h3>Values</h3>
+                        <nav id="cm-mode-tabs" class="tabs vstack" role="tablist" aria-label="Value mode">
+                            <button type="button" data-mode="row" aria-selected="true">Row-normalized</button>
+                            <button type="button" data-mode="counts" aria-selected="false">Counts</button>
+                        </nav>
+                    </div>
+
+                    <div class="section">
+                        <label>
+                            Show Top-K classes (by count)
+                            <input id="cm-topk" type="number" min="1" max="120" value="20" />
+                        </label>
+                    </div>
+
+                    <div class="section infobox">
+                        <h3>How to read</h3>
+                        <p><strong>Rows</strong> = true class, <strong>Columns</strong> = predicted class.</p>
+                        <p>Top-K limits rows/columns to the most frequent classes and collapses the rest into
+                            <strong>Other</strong> so totals are preserved.</p>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+
     </main>
 
     <script src="app.js"></script>
+
+    <!-- Help Drawer -->
+    <aside id="help-drawer" class="help-drawer" role="dialog" aria-modal="true" aria-hidden="true"
+        aria-labelledby="help-title" tabindex="-1">
+        <header class="help-drawer__header">
+            <button id="help-close" class="help-close" aria-label="Close help">✕</button>
+            <h2 id="help-title">How to use this dashboard</h2>
+        </header>
+
+        <div class="help-drawer__body">
+            <h3>Tabs</h3>
+            <ul>
+                <li><strong>CLS UMAP / Tanimoto UMAP</strong> — toggle either to show the corresponding scatter plot and
+                    clustering metrics.</li>
+                <li><strong>Rank-1 / Mean-rank / Tanimoto</strong> — shows the accuracy bar chart for that metric.</li>
+            </ul>
+
+            <h3>Sidebar (UMAP)</h3>
+            <ul>
+                <li><strong>Search</strong> — filter class checklist.</li>
+                <li><strong>NP Superclasses</strong> — select classes to highlight/hide (hover also highlights).</li>
+                <li><strong>Point Styling</strong> — size, unselected opacity, or hide unselected points.</li>
+            </ul>
+
+            <h3>Sidebar (Accuracy)</h3>
+            <ul>
+                <li><strong>Sort by value</strong> — descending/ascending.</li>
+                <li><strong>Show sample size</strong> — adds <code>(n=…)</code> to labels.</li>
+                <li><strong>Top-K by count</strong> — limits classes by item count (also affects UMAP & metrics lists).
+                </li>
+            </ul>
+
+            <h3>Clustering Metrics</h3>
+            <ul>
+                <li>Choose a metric tab (e.g. Silhouette) to see a per-class bar chart and a short explanation.</li>
+            </ul>
+
+            <h3>Chemical composition & NMR</h3>
+            <ul>
+                <li>Select a metric (Avg. # Carbons, Avg. # Hydrogens, Avg. # Peaks: HSQC / 13C NMR / 1H NMR).</li>
+                <li>Use <strong>Top-K</strong> to cap the list by counts; colors match the global class palette.</li>
+            </ul>
+
+            <h3>Layout tips</h3>
+            <ul>
+                <li>Drag the center divider to resize UMAP vs Accuracy when both are shown.</li>
+                <li>Panels scroll if content exceeds the viewport.</li>
+            </ul>
+
+            <h3>Shortcuts</h3>
+            <ul>
+                <li><strong>?</strong> or <strong>H</strong>: open help</li>
+                <li><strong>Esc</strong>: close help</li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Dim overlay (click to close) -->
+    <div id="help-overlay" class="help-overlay" hidden></div>
+
 </body>
 
 </html>

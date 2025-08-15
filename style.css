@@ -1,384 +1,405 @@
-/* --- Light theme vars --- */
-:root {
-    --bg: #ffffff;
-    --panel: #f7f9fb;
-    --text: #0b1220;
-    --muted: #4b5563;
-    --accent: #2563eb;
-    --border: #e5e7eb;
+/* ===========================
+   Light theme & base
+   =========================== */
+:root{
+  --bg:#fff;
+  --panel:#f7f9fb;
+  --text:#0b1220;
+  --muted:#4b5563;
+  --accent:#2563eb;
+  --border:#e5e7eb;
+
+  --header-h:58px;               /* actual header height */
 }
 
-* {
-    box-sizing: border-box;
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji";
 }
 
-html,
-body {
-    height: 100%;
+/* ===========================
+   Header
+   =========================== */
+header{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px;
+  border-bottom:1px solid var(--border);
+  background:#ffffffcc; backdrop-filter:blur(6px);
+}
+h1{ margin:0; font-size:18px; letter-spacing:.2px; }
+
+/* Hide file/sample controls in UI */
+.file-controls{ display:none !important; }
+
+/* ===========================
+   Inputs
+   =========================== */
+input[type="text"], input[type="number"]{
+  width:100%; padding:8px 10px;
+  border:1px solid var(--border); border-radius:8px;
+  background:var(--bg); color:var(--text);
+}
+input[type="range"]{ width:100%; }
+code{ background:#eef2f7; padding:2px 4px; border-radius:4px; }
+
+/* ===========================
+   Tabs / toolbar
+   =========================== */
+.tabs{ display:flex; gap:6px; }
+.tabs button{
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.tabs button[aria-selected="true"]{ outline:2px solid var(--accent); outline-offset:0; }
+.tabs.sub{ margin-left:0; }
+
+.toolbar{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.toolbar .group{ display:flex; align-items:center; gap:10px; }
+.vsep{ width:1px; height:30px; background:var(--border); margin:0 6px; }
+
+/* ===========================
+   Main grid
+   - Row 1: sidebar + top panes
+   - Row 2: clustering metrics (full width, page may scroll)
+   =========================== */
+main{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  grid-template-rows:auto auto;                  /* let the page grow */
+  min-height:calc(100vh - var(--header-h));      /* at least viewport */
 }
 
-body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+/* Sidebar never dictates row height; it scrolls instead */
+#sidebar{
+  grid-row:1;
+  align-self:stretch;
+  max-height:calc(100vh - var(--header-h));      /* stays flush with top row */
+  overflow:auto;
+  padding:14px;
+  border-right:1px solid var(--border);
+  background:#fbfdff;
 }
 
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    background: #ffffffcc;
-    /* light glass */
-    backdrop-filter: blur(6px);
+.section{ margin-bottom:18px; }
+.section h2{ margin:10px 0; font-size:14px; color:var(--muted); }
+.checklist{ display:grid; gap:6px; max-height:50vh; overflow:auto; padding-right:4px; }
+.chk{ display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:6px; border:1px solid transparent; }
+.chk:hover{ background:#f3f6fb; border-color:var(--border); }
+.chk .swatch{ width:12px; height:12px; border-radius:3px; border:1px solid rgba(0,0,0,.15); }
+label.toggle{ display:flex; align-items:center; gap:8px; user-select:none; }
+
+/* ===========================
+   Top panes area
+   =========================== */
+#panes{
+  grid-row:1;
+  display:grid;
+  gap:10px;
+  padding:10px;
+  grid-auto-rows:minmax(0,auto);
+  /* ensure the top row is at least viewport height; page can extend beyond */
+  min-height:calc(100vh - var(--header-h));
+  overflow:hidden;
+}
+#panes.single{ grid-template-columns:1fr; }
+#panes.dual  { grid-template-columns:1fr 6px 1fr; }
+
+.pane{
+  position:relative;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
 }
 
-h1 {
-    margin: 0;
-    font-size: 18px;
-    letter-spacing: 0.2px;
+/* UMAP + Accuracy fill their pane */
+#plot-umap, #plot-acc{
+  flex:1 1 auto;
+  min-height:0;
+  width:100%;
 }
 
-.file-controls {
-    display: flex;
-    gap: 10px;
+/* Accuracy pane can scroll internally for large K */
+#pane-acc{ overflow:auto; -webkit-overflow-scrolling:touch; }
+
+/* Status badges (kept, but you’re hiding them in JS; harmless) */
+.panel-status{
+  position:absolute; left:10px; bottom:10px;
+  background:rgba(255,255,255,.85);
+  border:1px solid var(--border); border-radius:6px;
+  padding:6px 10px; font-size:12px; color:var(--muted);
 }
 
-.file-btn,
-#use-sample {
-    background: var(--panel);
-    color: var(--text);
-    border: 1px solid var(--border);
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
+/* Divider (draggable) */
+#divider{
+  width:6px; min-width:6px;
+  background:linear-gradient(to bottom,#e5e7eb,#d1d5db);
+  border-left:1px solid #cbd5e1; border-right:1px solid #cbd5e1;
+  border-radius:2px; cursor:col-resize;
+}
+#divider:hover{ background:linear-gradient(to bottom,#dfe3e8,#cdd6df); }
+#divider.dragging{ background:#c9d4e0; }
+
+/* Placeholder when both panes are hidden */
+.pane.placeholder{
+  display:grid; place-items:center;
+  background:#fafcff; border:1px dashed var(--border);
+  border-radius:8px; color:var(--muted);
+}
+.placeholder-inner h3{ margin:0 0 6px; font-weight:600; color:var(--text); }
+.placeholder-inner p{ margin:0; }
+
+/* Dim control panels when inactive (visual only) */
+#umap-controls.inactive, #acc-controls.inactive{ opacity:.4; }
+
+/* Honor [hidden] always */
+[hidden]{ display:none !important; }
+.pane[hidden], #divider[hidden], #pane-blank[hidden]{ display:none !important; }
+
+/* ===========================
+   Clustering Metrics (full width)
+   - lives under the top row; page scrolls if tall
+   =========================== */
+#metrics{
+  grid-row:2; grid-column:1 / -1;
+  padding:14px; border-top:1px solid var(--border); background:#fff;
+}
+#metrics h2{ margin:0 0 10px; font-size:18px; color:var(--text); }
+
+#metrics-grid{
+  display:grid;
+  grid-template-columns:minmax(520px,2fr) minmax(340px,1fr);
+  gap:12px; align-items:start;
+}
+#metrics-left{ position:relative; }
+#metrics-right{ border:1px solid var(--border); border-radius:8px; padding:12px; background:#fbfdff; }
+#metrics-plot{ width:100%; height:560px; min-width:0; }
+.metric-desc h3{ margin:6px 0 8px; }
+.metric-desc p{ margin:6px 0; color:var(--muted); line-height:1.45; }
+#metrics.disabled{ opacity:.5; pointer-events:none; }
+
+/* ===========================
+   Responsive
+   =========================== */
+@media (max-width:1100px){
+  #metrics-grid{ grid-template-columns:1fr; }
 }
 
-.file-btn:hover,
-#use-sample:hover {
-    border-color: var(--accent);
-}
+/* Optional: keep the status nodes hidden */
+#status, #status-umap, #status-acc{ display:none !important; }
 
-main {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  grid-auto-rows: auto;
-  align-items: start;
-  min-height: calc(100vh - 58px); /* page can be taller than viewport */
-}
-
-#sidebar {
-    padding: 14px;
-    border-right: 1px solid var(--border);
-    overflow: auto;
-    background: #fbfdff;
-}
-
-.section {
-    margin-bottom: 18px;
-}
-
-.section h2 {
-    margin: 10px 0;
-    font-size: 14px;
-    color: var(--muted);
-}
-
-.checklist {
-    display: grid;
-    gap: 6px;
-    max-height: 50vh;
-    overflow: auto;
-    padding-right: 4px;
-}
-
-.chk {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid transparent;
-}
-
-.chk:hover {
-    background: #f3f6fb;
-    border-color: var(--border);
-}
-
-.chk .swatch {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-}
-
-label.toggle {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
-}
-
-#plot-wrap {
-    position: relative;
-    padding: 10px;
-}
-
-#plot {
-    width: 100%;
-    height: calc(100vh - 110px);
-}
-
-#status {
-    position: absolute;
-    left: 14px;
-    bottom: 14px;
-    background: rgba(255, 255, 255, 0.85);
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--muted);
-}
-
-input[type="range"] {
-    width: 100%;
-}
-
-input[type="text"] {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text);
-}
-
-code {
-    background: #eef2f7;
-    padding: 2px 4px;
-    border-radius: 4px;
-}
-
-/* Tabs (unchanged structure, tuned for light) */
-.tabs {
-    display: flex;
-    gap: 6px;
-}
-
-.tabs button {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.tabs button[aria-selected="true"] {
-    outline: 2px solid var(--accent);
-    outline-offset: 0;
-}
-
-/* tabs already present; add a “sub” variant and bar tweaks */
-.tabs.sub {
-    margin-left: 10px;
-}
-
-#acc-controls .toggle,
-#umap-controls .toggle {
-    margin-top: 6px;
-}
-
-/* Header toolbar layout */
-.toolbar {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-}
-
-.toolbar .group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* Sub tabs look */
-.tabs.sub {
-    margin-left: 0;
-}
-
-.tabs {
-    display: flex;
-    gap: 6px;
-}
-
-.tabs button {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.tabs button[aria-selected="true"] {
-    outline: 2px solid var(--accent);
-    outline-offset: 0;
-}
-
-/* Divider bar (visual only; we can add drag later) */
-.divider {
-    background: linear-gradient(to bottom, #e5e7eb, #d1d5db);
-    border-left: 1px solid #cbd5e1;
-    border-right: 1px solid #cbd5e1;
-    border-radius: 2px;
-    cursor: col-resize;
-}
-
-/* Dimming inactive control sections */
-#umap-controls.inactive,
-#acc-controls.inactive {
-    opacity: 0.4;
-}
-
-/* Number input in accuracy options */
-#acc-controls input[type="number"] {
-    width: 120px;
-    padding: 6px 8px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
-}
-
-/* Slim separator in the header toolbar */
-.vsep {
-    width: 1px;
-    height: 30px;
-    background: #e5e7eb;
-    margin: 0 6px;
-}
-
-/* Grid with center divider column already defined */
-.panes.dual {
-    grid-template-columns: 1fr 6px 1fr;
-}
-
-/* Divider visuals + drag states */
-.divider {
-    background: linear-gradient(to bottom, #e5e7eb, #d1d5db);
-    border-left: 1px solid #cbd5e1;
-    border-right: 1px solid #cbd5e1;
-    border-radius: 2px;
-    cursor: col-resize;
-}
-
-.divider:hover {
-    background: linear-gradient(to bottom, #dfe3e8, #cdd6df);
-}
-
-.divider.dragging {
-    background: #c9d4e0;
-}
-
-/* ===== Clustering Metrics section ===== */
-#metrics {
-  grid-column: 1 / -1;      /* <-- full width across sidebar + content */
+/* ===== Composition & NMR Summaries ===== */
+#chem{
+  grid-column: 1 / -1;
+  grid-row: auto;       /* third row under metrics */
   padding: 14px;
   border-top: 1px solid var(--border);
   background: #fff;
 }
+#chem h2{ margin:0 0 10px; font-size:18px; color:var(--text); }
 
-#metrics h2 { margin: 0 0 10px; font-size: 18px; color: var(--text); }
-
-/* Two-column layout inside metrics (left: plot; right: explanation) */
-#metrics-grid {
+#chem-grid{
   display: grid;
-  grid-template-columns: minmax(520px, 2fr) minmax(340px, 1fr);
+  grid-template-columns: 320px 1fr;
   gap: 12px;
   align-items: start;
+  min-height: 0;
 }
 
-#metrics-plot { width: 100%; height: 560px; }  /* a bit taller works better */
-
-/* Responsive: stack vertically on narrow viewports */
-@media (max-width: 1100px) {
-  #metrics-grid { grid-template-columns: 1fr; }
+#chem-side{
+  min-height: 0;
+  overflow: auto;
+  border-right: 1px solid var(--border);
+  padding-right: 12px;
 }
+#chem-side h3{ margin: 10px 0 6px; font-size: 14px; color: var(--muted); }
+#chem-side .muted-note p{ color: var(--muted); font-size: 12px; }
 
-#metrics-left { position: relative; }
-#metrics-right { border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: #fbfdff; }
-
-.metric-desc h3 { margin: 6px 0 8px; }
-.metric-desc p { margin: 6px 0; color: var(--muted); line-height: 1.45; }
-
-#metrics.disabled { opacity: 0.5; pointer-events: none; }
-
-.pane.placeholder {
-  display: grid;
-  place-items: center;
-  background: #fafcff;
-  border: 1px dashed var(--border);
+#chem-main{ min-width: 0; }
+#chem-plot{ width: 100%; height: 520px; min-width: 0; } /* JS may override height */
+#chem-desc{
+  margin-top: 12px;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  color: var(--muted);
+  padding: 12px;
+  background: #fbfdff;
 }
-.placeholder-inner h3 {
-  margin: 0 0 6px;
-  font-weight: 600;
-  color: var(--text);
-}
-.placeholder-inner p {
-  margin: 0;
-}
+#chem-desc h3{ margin: 6px 0 8px; }
+#chem-desc p{ margin: 6px 0; color: var(--muted); line-height: 1.45; }
 
-/* Let grid items shrink; avoid horizontal overflow */
-#panes { overflow: hidden; }
-.pane { min-width: 0; overflow: hidden; }
-#plot-umap, #plot-acc, #metrics-plot { min-width: 0; }  /* Plotly divs */
-
-.pane[hidden],
-#divider[hidden],
-#pane-blank[hidden] {
-  display: none !important;
+@media (max-width: 1100px){
+  #chem-grid{ grid-template-columns: 1fr; }
+  #chem-side{ border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 }
 
-
-/* === Repair patch: restore panes grid + hide loaders === */
-
-/* Hide the file/sample controls again */
-.file-controls { display: none !important; }
-
-/* Top panes container must be a grid */
-#panes {
-  display: grid;
-  gap: 10px;
-  padding: 10px;
-  grid-auto-rows: minmax(0, auto);
-  overflow-x: hidden;
-  overflow-y: visible;
+/* Make CHEM metric selector vertical */
+#chem-tabs{
+  display: flex;
+  flex-direction: column;   /* stack buttons */
+  gap: 8px;
+  max-height: 100%;
+  overflow: auto;           /* scroll if lots of metrics */
 }
 
-/* Single vs split layouts */
-#panes.single { grid-template-columns: 1fr; }
-#panes.dual   { grid-template-columns: 1fr 6px 1fr; }
+#chem-tabs button{
+  width: 100%;
+  text-align: left;         /* read like a list */
+  justify-content: flex-start;
+  white-space: normal;      /* allow wrapping for long labels */
+  line-height: 1.2;
+  padding: 8px 10px;        /* a bit taller for touch */
+  font-size: 13px;          /* slightly smaller in the narrow sidebar */
+}
 
-/* Make sure the divider actually has width in the middle column */
-#divider.divider { width: 6px; min-width: 6px; }
+.tabs { padding: 4px; overflow: visible; }
+.tabs button { margin: 2px; }
+.tabs button[aria-selected="true"] { outline-offset: 2px; }
+#chem-metric-tabs,
+#chem-tabs {                 /* whichever id you're using */
+  padding-right: 12px;       /* extra room on the right for the outline */
+  overflow: visible;         /* don't clip the outline */
+}
 
-/* Plots: responsive heights per layout (keep these even if defined above) */
-#panes.single #plot-umap, #panes.single #plot-acc { height: 560px; }
-#panes.dual   #plot-umap, #panes.dual   #plot-acc { height: 420px; }
+/* (optional) keep the selected ring slightly off the button edge */
+#chem-metric-tabs button[aria-selected="true"],
+#chem-tabs button[aria-selected="true"] {
+  outline-offset: 2px;
+}
 
-/* Keep grid items from forcing horizontal scroll */
-#plot-umap, #plot-acc, #metrics-plot { min-width: 0; }
-.pane { min-width: 0; overflow: hidden; }
+/* Help button (header, right) */
+.help-btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:var(--panel);
+  cursor:pointer;
+}
+.help-btn:hover{ border-color:var(--accent); }
+.help-btn:focus{ outline:2px solid var(--accent); outline-offset:2px; }
 
-/* Always honor [hidden] */
-.pane[hidden], #divider[hidden], #pane-blank[hidden] { display: none !important; }
+/* Drawer container */
+.help-drawer{
+  position:fixed;
+  top:var(--header-h);
+  right:0;
+  width:clamp(320px, 34vw, 420px);
+  height:calc(100vh - var(--header-h));
+  background:#fff;
+  border-left:1px solid var(--border);
+  box-shadow:-12px 0 24px rgba(0,0,0,.08);
+  transform:translateX(100%);
+  transition:transform .28s ease;
+  z-index:1002;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.help-drawer.open{ transform:translateX(0); }
+.help-drawer__header{
+  display:flex; align-items:center; gap:8px;
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+}
+.help-drawer__header h2{
+  margin:0; font-size:18px; color:var(--text);
+}
+.help-close{
+  margin-right:auto;
+  border:1px solid var(--border);
+  background:var(--panel);
+  border-radius:8px;
+  width:32px; height:32px;
+  display:grid; place-items:center;
+  cursor:pointer;
+}
+.help-close:hover{ border-color:var(--accent); }
+.help-close:focus{ outline:2px solid var(--accent); outline-offset:2px; }
 
-#sidebar { min-height: 0; }
+.help-drawer__body{
+  padding:14px;
+  overflow:auto;
+}
+.help-drawer__body h3{ margin:14px 0 6px; }
+.help-drawer__body ul{ margin:6px 0 12px 18px; }
+.help-drawer__body li{ margin:4px 0; }
+
+/* Dim overlay (below header) */
+.help-overlay{
+  position:fixed;
+  top:var(--header-h);
+  left:0; right:0; bottom:0;
+  background:rgba(0,0,0,.15);
+  z-index:1001;
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.help-overlay.open{ opacity:1; }
+body.help-open{ overflow:hidden; }  /* optional: prevent background scroll */
+
+/* ===========================
+   Confusion Matrix section
+   =========================== */
+#conf{
+  grid-row: auto;
+  grid-column: 1 / -1;
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: #fff;
+}
+#conf h2{ margin:0 0 10px; font-size:18px; color:var(--text); }
+
+#conf-grid{
+  display:grid;
+  grid-template-columns:minmax(520px,2fr) minmax(320px,1fr); /* plot | right sidebar */
+  gap:12px;
+  align-items:start;
+}
+
+#conf-plot{ width:100%; height:640px; min-width:0; }
+
+#conf-right{
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+  background:#fbfdff;
+  overflow:visible;        /* so focus ring never clips */
+}
+
+#conf-right label{
+  display:block;
+  margin:10px 0;
+}
+
+@media (max-width:1100px){
+  #conf-grid{ grid-template-columns:1fr; }
+}
+
+/* Vertical button tabs (used in #conf-right) */
+.tabs.vstack{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.tabs.vstack button{
+  width:100%;
+  text-align:left;
+  padding:8px 12px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:10px;     /* a bit larger to avoid clipped ring */
+  cursor:pointer;
+}
+.tabs.vstack button[aria-selected="true"]{
+  outline:2px solid var(--accent);
+  outline-offset:2px;     /* keep ring away from edge */
+}
+#conf-right{ overflow:visible; } /* don’t clip the outline */
