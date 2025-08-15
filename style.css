@@ -1,0 +1,384 @@
+/* --- Light theme vars --- */
+:root {
+    --bg: #ffffff;
+    --panel: #f7f9fb;
+    --text: #0b1220;
+    --muted: #4b5563;
+    --accent: #2563eb;
+    --border: #e5e7eb;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    background: #ffffffcc;
+    /* light glass */
+    backdrop-filter: blur(6px);
+}
+
+h1 {
+    margin: 0;
+    font-size: 18px;
+    letter-spacing: 0.2px;
+}
+
+.file-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.file-btn,
+#use-sample {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.file-btn:hover,
+#use-sample:hover {
+    border-color: var(--accent);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  grid-auto-rows: auto;
+  align-items: start;
+  min-height: calc(100vh - 58px); /* page can be taller than viewport */
+}
+
+#sidebar {
+    padding: 14px;
+    border-right: 1px solid var(--border);
+    overflow: auto;
+    background: #fbfdff;
+}
+
+.section {
+    margin-bottom: 18px;
+}
+
+.section h2 {
+    margin: 10px 0;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.checklist {
+    display: grid;
+    gap: 6px;
+    max-height: 50vh;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+.chk {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+}
+
+.chk:hover {
+    background: #f3f6fb;
+    border-color: var(--border);
+}
+
+.chk .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+label.toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+#plot-wrap {
+    position: relative;
+    padding: 10px;
+}
+
+#plot {
+    width: 100%;
+    height: calc(100vh - 110px);
+}
+
+#status {
+    position: absolute;
+    left: 14px;
+    bottom: 14px;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+}
+
+input[type="range"] {
+    width: 100%;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+}
+
+code {
+    background: #eef2f7;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+/* Tabs (unchanged structure, tuned for light) */
+.tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.tabs button {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] {
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+}
+
+/* tabs already present; add a “sub” variant and bar tweaks */
+.tabs.sub {
+    margin-left: 10px;
+}
+
+#acc-controls .toggle,
+#umap-controls .toggle {
+    margin-top: 6px;
+}
+
+/* Header toolbar layout */
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.toolbar .group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Sub tabs look */
+.tabs.sub {
+    margin-left: 0;
+}
+
+.tabs {
+    display: flex;
+    gap: 6px;
+}
+
+.tabs button {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.tabs button[aria-selected="true"] {
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+}
+
+/* Divider bar (visual only; we can add drag later) */
+.divider {
+    background: linear-gradient(to bottom, #e5e7eb, #d1d5db);
+    border-left: 1px solid #cbd5e1;
+    border-right: 1px solid #cbd5e1;
+    border-radius: 2px;
+    cursor: col-resize;
+}
+
+/* Dimming inactive control sections */
+#umap-controls.inactive,
+#acc-controls.inactive {
+    opacity: 0.4;
+}
+
+/* Number input in accuracy options */
+#acc-controls input[type="number"] {
+    width: 120px;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* Slim separator in the header toolbar */
+.vsep {
+    width: 1px;
+    height: 30px;
+    background: #e5e7eb;
+    margin: 0 6px;
+}
+
+/* Grid with center divider column already defined */
+.panes.dual {
+    grid-template-columns: 1fr 6px 1fr;
+}
+
+/* Divider visuals + drag states */
+.divider {
+    background: linear-gradient(to bottom, #e5e7eb, #d1d5db);
+    border-left: 1px solid #cbd5e1;
+    border-right: 1px solid #cbd5e1;
+    border-radius: 2px;
+    cursor: col-resize;
+}
+
+.divider:hover {
+    background: linear-gradient(to bottom, #dfe3e8, #cdd6df);
+}
+
+.divider.dragging {
+    background: #c9d4e0;
+}
+
+/* ===== Clustering Metrics section ===== */
+#metrics {
+  grid-column: 1 / -1;      /* <-- full width across sidebar + content */
+  padding: 14px;
+  border-top: 1px solid var(--border);
+  background: #fff;
+}
+
+#metrics h2 { margin: 0 0 10px; font-size: 18px; color: var(--text); }
+
+/* Two-column layout inside metrics (left: plot; right: explanation) */
+#metrics-grid {
+  display: grid;
+  grid-template-columns: minmax(520px, 2fr) minmax(340px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+#metrics-plot { width: 100%; height: 560px; }  /* a bit taller works better */
+
+/* Responsive: stack vertically on narrow viewports */
+@media (max-width: 1100px) {
+  #metrics-grid { grid-template-columns: 1fr; }
+}
+
+#metrics-left { position: relative; }
+#metrics-right { border: 1px solid var(--border); border-radius: 8px; padding: 12px; background: #fbfdff; }
+
+.metric-desc h3 { margin: 6px 0 8px; }
+.metric-desc p { margin: 6px 0; color: var(--muted); line-height: 1.45; }
+
+#metrics.disabled { opacity: 0.5; pointer-events: none; }
+
+.pane.placeholder {
+  display: grid;
+  place-items: center;
+  background: #fafcff;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+}
+.placeholder-inner h3 {
+  margin: 0 0 6px;
+  font-weight: 600;
+  color: var(--text);
+}
+.placeholder-inner p {
+  margin: 0;
+}
+
+/* Let grid items shrink; avoid horizontal overflow */
+#panes { overflow: hidden; }
+.pane { min-width: 0; overflow: hidden; }
+#plot-umap, #plot-acc, #metrics-plot { min-width: 0; }  /* Plotly divs */
+
+.pane[hidden],
+#divider[hidden],
+#pane-blank[hidden] {
+  display: none !important;
+}
+
+
+/* === Repair patch: restore panes grid + hide loaders === */
+
+/* Hide the file/sample controls again */
+.file-controls { display: none !important; }
+
+/* Top panes container must be a grid */
+#panes {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  grid-auto-rows: minmax(0, auto);
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+/* Single vs split layouts */
+#panes.single { grid-template-columns: 1fr; }
+#panes.dual   { grid-template-columns: 1fr 6px 1fr; }
+
+/* Make sure the divider actually has width in the middle column */
+#divider.divider { width: 6px; min-width: 6px; }
+
+/* Plots: responsive heights per layout (keep these even if defined above) */
+#panes.single #plot-umap, #panes.single #plot-acc { height: 560px; }
+#panes.dual   #plot-umap, #panes.dual   #plot-acc { height: 420px; }
+
+/* Keep grid items from forcing horizontal scroll */
+#plot-umap, #plot-acc, #metrics-plot { min-width: 0; }
+.pane { min-width: 0; overflow: hidden; }
+
+/* Always honor [hidden] */
+.pane[hidden], #divider[hidden], #pane-blank[hidden] { display: none !important; }
+
+#sidebar { min-height: 0; }
