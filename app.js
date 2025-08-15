@@ -1251,32 +1251,70 @@ document.getElementById("chem-topk")?.addEventListener("input", () => drawChemPl
           <h2 id="help-title">How to use this dashboard</h2>
         </header>
         <div class="help-drawer__body">
-          <h3>Tabs</h3>
-          <ul>
-            <li><strong>CLS/Tanimoto UMAP</strong> — toggle the scatter & metrics.</li>
-            <li><strong>Rank-1/Mean-rank/Tanimoto</strong> — accuracy bar chart.</li>
-          </ul>
-          <h3>UMAP Sidebar</h3>
-          <ul>
-            <li>Search, class checklist, point styling.</li>
-          </ul>
-          <h3>Accuracy Sidebar</h3>
-          <ul>
-            <li>Sort, show sample size, Top-K by count.</li>
-          </ul>
-          <h3>Clustering Metrics</h3>
-          <ul>
-            <li>Select a metric tab; read the explanation box.</li>
-          </ul>
-          <h3>Chem/NMR</h3>
-          <ul>
-            <li>Choose metric; Top-K filters classes; colors match palette.</li>
-          </ul>
-          <h3>Tips</h3>
-          <ul>
-            <li>Drag center divider to resize; panels scroll if needed.</li>
-            <li>Shortcuts: <strong>?</strong>/<strong>H</strong> to open, <strong>Esc</strong> to close.</li>
-          </ul>
+            <h3>Tabs</h3>
+            <ul>
+                <li><strong>CLS UMAP / Tanimoto UMAP</strong> — toggle to show the corresponding scatter plot. When a
+                    UMAP is active, the <em>Clustering Metrics</em> section appears.</li>
+                <li><strong>Rank-1 / Mean-rank / Tanimoto</strong> — shows the accuracy bar chart for that metric.</li>
+                <li><strong>Chem / NMR</strong> — vertical buttons on the right choose which summary metric to plot
+                    (Avg. Carbons, Hydrogens, HSQC / 13C NMR / 1H NMR peaks).</li>
+                <li><strong>Confusion Matrix</strong> — select <em>k</em> (1/5/10) and <em>Mode</em> (Row-normalized or
+                    Counts) via vertical button groups on the right.</li>
+            </ul>
+
+            <h3>Sidebar (UMAP)</h3>
+            <ul>
+                <li><strong>Search</strong> — filter the class checklist.</li>
+                <li><strong>NP Superclasses</strong> — check classes to highlight; uncheck to dim/hide. <em>Hover</em> a
+                    class in any plot to temporarily highlight it everywhere.</li>
+                <li><strong>Point Styling</strong> — adjust point size & unselected opacity, or <em>Hide unselected</em>
+                    entirely.</li>
+                <li><strong>Top-K by count</strong> — limits visible classes to the K most frequent; affects UMAP,
+                    Accuracy bars, Metrics, and Chem/NMR lists.</li>
+            </ul>
+
+            <h3>Sidebar (Accuracy)</h3>
+            <ul>
+                <li><strong>Sort by value</strong> — toggle descending/ascending.</li>
+                <li><strong>Show sample size</strong> — appends <code>(n=…)</code> to each label.</li>
+                <li><strong>Top-K by count</strong> — caps the chart to the K largest classes (panel scrolls if tall).
+                </li>
+            </ul>
+
+            <h3>Clustering Metrics</h3>
+            <ul>
+                <li>Choose a metric tab (e.g. Silhouette) to see a per-class bar chart with matching class colors.</li>
+                <li>The info card explains what the metric means and whether higher or lower is better.</li>
+                <li>Labels auto-shrink when many classes are shown; use Top-K to reduce clutter.</li>
+            </ul>
+
+            <h3>Chemical Composition & NMR</h3>
+            <ul>
+                <li>Use the <strong>vertical metric selector</strong> to plot: Avg. # Carbons, Avg. # Hydrogens, Avg. #
+                    Peaks (HSQC / 13C NMR / 1H NMR).</li>
+                <li><strong>Top-K</strong> limits to the most frequent classes; colors match the global palette used in
+                    UMAP/Accuracy.</li>
+            </ul>
+
+            <h3>Confusion Matrix</h3>
+            <ul>
+                <li>Select <strong>k</strong> (1, 5, or 10) and <strong>Mode</strong> (Row-normalized or Counts) from
+                    the <em>right-hand sidebar</em>.</li>
+                <li><strong>Top-K classes</strong> shows the K most frequent classes; all others are aggregated into an
+                    <em>Other</em> row/column so no information is lost.</li>
+                <li>Axis labels auto-shrink/rotate as needed; the matrix panel scrolls if large.</li>
+            </ul>
+
+            <h3>Layout tips</h3>
+            <ul>
+                <li>Drag the center divider to resize UMAP vs Accuracy when both are shown.</li>
+                <li>Panels scroll if content exceeds the viewport; labels shrink dynamically when crowded.</li>
+            </ul>
+
+            <h3>Shortcuts</h3>
+            <ul>
+                <li><strong>Esc</strong>: close help</li>
+            </ul>
         </div>`;
             document.body.appendChild(drawer);
         }
